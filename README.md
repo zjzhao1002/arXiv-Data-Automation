@@ -10,8 +10,8 @@ A Python-based automation tool that streamlines research paper tracking by fetch
 
 - **Automated Retrieval**: Fetches the latest research papers from arXiv for specified categories (e.g., `hep-ph`, `hep-ex`).
 - **PDF Downloader**: Automatically downloads and organizes research papers in PDF format into date-stamped local directories.
-- **Local AI Analysis**: Uses **Ollama (Llama 3.2)** to analyze abstracts and extract relevant keywords without sending data to external cloud LLM APIs.
-- **Google Sheets Sync**: Automatically updates a Google Spreadsheet with new paper metadata (Title, Authors, arXiv URL, PDF link, and AI-generated keywords).
+- **Local AI Analysis**: Uses **Ollama (Llama 3.2)** to analyze abstracts and extract relevant keywords, as well as extract contact information (emails and affiliations) directly from PDFs, without sending data to external cloud LLM APIs.
+- **Google Sheets Sync**: Automatically updates a Google Spreadsheet with new paper metadata (Title, Authors, arXiv URL, PDF link, AI-generated keywords, and extracted contact info).
 - **CSV Export**: Maintains a local `arxiv_data.csv` for data persistence and offline use.
 
 ## 🛠️ Prerequisites

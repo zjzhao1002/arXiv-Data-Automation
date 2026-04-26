@@ -13,11 +13,11 @@ if __name__ == "__main__":
     startdate = get_date_string(now - datetime.timedelta(days=7))
     enddate = get_date_string(now)
 
-    catagories = ["hep-ph", "hep-ex"]  # Example category, you can change it to any valid arXiv category
+    categories = ["hep-ph", "hep-ex"]  # Example category, you can change it to any valid arXiv category
 
     # Loop through the categories and get data for each category. Merge the data into a single DataFrame if needed.
     dfs = []
-    for category in catagories:
+    for category in categories:
         print(f"Retrieving data for category {category} from {startdate} to {enddate}...")
         df = get_arxiv_data(category, startdate, enddate)
         print(f"Data for category {category} retrieved successfully.")

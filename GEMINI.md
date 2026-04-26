@@ -1,14 +1,15 @@
 # arXiv Data Automation
 
-This project is a Python-based automation tool designed to fetch research paper metadata from arXiv, extract keywords using an LLM, download PDFs, and synchronize the results with a Google Sheet.
+This project is a Python-based automation tool designed to fetch research paper metadata from arXiv, extract keywords and contact information using an LLM, download PDFs, and synchronize the results with a Google Sheet.
 
 ## Project Overview
 
-- **Purpose**: Automates the process of tracking new research papers on arXiv. It fetches data for specific categories, uses Llama 3.2 (via Ollama) to summarize/extract keywords, downloads the PDF files locally, and uploads the compiled data to a Google Sheet for easy tracking and sharing.
+- **Purpose**: Automates the process of tracking new research papers on arXiv. It fetches data for specific categories, uses Llama 3.2 (via Ollama) to summarize/extract keywords and extract contact information (emails and affiliations) from downloaded PDFs, and uploads the compiled data to a Google Sheet for easy tracking and sharing.
 - **Main Technologies**:
   - **Python 3.13**: The core programming language.
   - **arxiv**: Library for interacting with the arXiv API and downloading PDFs.
-  - **Ollama (Llama 3.2)**: Used for intelligent keyword extraction from titles and abstracts.
+  - **Ollama (Llama 3.2)**: Used for intelligent keyword extraction from titles and abstracts, and contact information extraction from PDFs.
+  - **PyMuPDF**: Used for extracting text from PDF files to enable contact information extraction.
   - **pandas**: Used for data manipulation and intermediate CSV storage.
   - **gspread**: For interacting with the Google Sheets API.
   - **Google Sheets API**: The destination for the processed data.
@@ -17,7 +18,7 @@ This project is a Python-based automation tool designed to fetch research paper 
 
 ### Core Scripts
 - `main.py`: The entry point of the application. It defines the categories (`hep-ph`, `hep-ex` by default) and the date range (last 7 days), then orchestrates the fetching and sheet update process.
-- `get_arxiv_data.py`: Contains logic to query the arXiv API, download PDF files to a date-stamped directory, and use `ollama` to generate 5 keywords for each paper.
+- `get_arxiv_data.py`: Contains logic to query the arXiv API, download PDF files to a date-stamped directory, and use `ollama` to generate 5 keywords and extract contact info for each paper.
 - `update_google_sheet.py`: Handles authentication with Google APIs using a service account and updates a specific spreadsheet with the new data.
 
 ### Configuration & Data
@@ -49,6 +50,6 @@ python main.py
 
 - **Modular Design**: Logic is separated into fetching, processing, and uploading modules.
 - **Automated Downloads**: PDF files are automatically retrieved and organized into folders named by date range.
-- **LLM Integration**: Keyword extraction is performed locally using Ollama, ensuring data privacy and no API costs for extraction.
+- **LLM Integration**: Keyword and contact information extraction are performed locally using Ollama, ensuring data privacy and no API costs.
 - **Data Persistence**: Data is first saved to a local CSV (`arxiv_data.csv`) before being pushed to Google Sheets, providing a local backup.
 - **Categorization**: The tool is currently configured for High Energy Physics categories but can be extended by modifying the `catagories` list in `main.py`.
