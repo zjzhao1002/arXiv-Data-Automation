@@ -18,7 +18,6 @@ if __name__ == "__main__":
     # Loop through the categories and get data for each category. Merge the data into a single DataFrame if needed.
     dfs = []
     for category in categories:
-        print(f"Retrieving data for category {category} from {startdate} to {enddate}...")
         df = get_arxiv_data(category, startdate, enddate)
         print(f"Data for category {category} retrieved successfully.")
         dfs.append(df)

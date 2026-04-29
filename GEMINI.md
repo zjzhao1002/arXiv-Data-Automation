@@ -18,7 +18,7 @@ This project is a Python-based automation tool designed to fetch research paper 
 
 ### Core Scripts
 - `main.py`: The entry point of the application. It defines the categories (`hep-ph`, `hep-ex` by default) and the date range (last 7 days), then orchestrates the fetching and sheet update process.
-- `get_arxiv_data.py`: Contains logic to query the arXiv API, download PDF files to a date-stamped directory, and use `ollama` to generate 5 keywords and extract contact info for each paper.
+- `get_arxiv_data.py`: Contains logic to query the arXiv API, download PDF files to a date-stamped directory, and use `ollama` to generate 5 keywords and extract contact info for each paper. It includes a `category_checker` to validate categories and integrated model verification to ensure the Ollama model is available.
 - `update_google_sheet.py`: Handles authentication with Google APIs using a service account and updates a specific spreadsheet with the new data.
 
 ### Configuration & Data
@@ -52,4 +52,5 @@ python main.py
 - **Automated Downloads**: PDF files are automatically retrieved and organized into folders named by date range.
 - **LLM Integration**: Keyword and contact information extraction are performed locally using Ollama, ensuring data privacy and no API costs.
 - **Data Persistence**: Data is first saved to a local CSV (`arxiv_data.csv`) before being pushed to Google Sheets, providing a local backup.
-- **Categorization**: The tool is currently configured for High Energy Physics categories but can be extended by modifying the `catagories` list in `main.py`.
+- **Categorization and Validation**: The tool supports a wide range of arXiv categories. The `category_checker` in `get_arxiv_data.py` ensures that only valid categories are processed and provides human-readable names for logging.
+- **Model Verification and Auto-Pull**: The tool automatically checks for the required Ollama model before processing. If the model is missing, it prompts the user to pull it automatically.

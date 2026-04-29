@@ -69,9 +69,10 @@ python main.py
 The script will:
 1. Fetch papers from the last 7 days for the configured categories.
 2. **Download all related PDFs to a local directory.**
-3. Generate keywords using Llama 3.2.
-4. Save data to `arxiv_data.csv`.
-5. Create/Update a worksheet in your Google Sheet named `Data_[StartDate]_to_[EndDate]`.
+3. Verify the Ollama model (and prompt to pull if missing).
+4. Generate keywords and extract contact info using Llama 3.2.
+5. Save data to `arxiv_data.csv`.
+6. Create/Update a worksheet in your Google Sheet named `Data_[StartDate]_to_[EndDate]`.
 
 ## 📜 License
 
