@@ -1,4 +1,4 @@
-# arXiv-Data-Automation 🚀
+# arxiv-flow 🚀
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.13+](https://img.shields.io/badge/python-3.13+-blue.svg)](https://www.python.org/downloads/)
@@ -30,8 +30,8 @@ A Python-based automation tool that streamlines research paper tracking by fetch
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/yourusername/arXiv-Data-Automation.git
-   cd arXiv-Data-Automation
+   git clone https://github.com/zjzhao1002/arxiv-flow.git
+   cd arxiv-flow
    ```
 
 2. **Set up virtual environment**:

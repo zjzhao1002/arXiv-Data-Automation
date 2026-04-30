@@ -1,4 +1,4 @@
-# arXiv Data Automation
+# arxiv-flow
 
 This project is a Python-based automation tool designed to fetch research paper metadata from arXiv, extract keywords and contact information using an LLM, download PDFs, and synchronize the results with a Google Sheet.
 
