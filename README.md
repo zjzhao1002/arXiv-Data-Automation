@@ -1,37 +1,45 @@
-# arxiv-flow 🚀
+# arXivFlow 🚀
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.13+](https://img.shields.io/badge/python-3.13+-blue.svg)](https://www.python.org/downloads/)
 [![Ollama](https://img.shields.io/badge/Ollama-Llama3.2-orange.svg)](https://ollama.ai/)
+[![arXiv](https://img.shields.io/badge/arXiv-API-red.svg)](https://arxiv.org/help/api/index)
 
-A Python-based automation tool that streamlines research paper tracking by fetching data from arXiv, downloading PDFs, performing local AI-driven keyword extraction, and synchronizing everything to Google Sheets.
+**arXivFlow** is a powerful Python-based automation tool designed to streamline the research paper discovery and tracking process. It autonomously fetches metadata from arXiv, performs local AI-driven analysis using **Ollama (Llama 3.2)**, and synchronizes the results with **Google Sheets** and local databases.
+
+---
 
 ## ✨ Features
 
-- **Automated Retrieval**: Fetches the latest research papers from arXiv for specified categories (e.g., `hep-ph`, `hep-ex`).
-- **PDF Downloader**: Automatically downloads and organizes research papers in PDF format into date-stamped local directories.
-- **Local AI Analysis**: Uses **Ollama (Llama 3.2)** to analyze abstracts and extract relevant keywords, as well as extract contact information (emails and affiliations) directly from PDFs, without sending data to external cloud LLM APIs.
-- **Google Sheets Sync**: Automatically updates a Google Spreadsheet with new paper metadata (Title, Authors, arXiv URL, PDF link, AI-generated keywords, and extracted contact info).
-- **CSV Export**: Maintains a local `arxiv_data.csv` for data persistence and offline use.
+- **Automated Retrieval**: Fetch the latest papers from specific arXiv categories (e.g., `cs.AI`, `cs.LG`, `hep-ph`) within any date range.
+- **Local AI Analysis**: Uses **Ollama (Llama 3.2)** to extract keywords and contact information (emails/affiliations) directly from PDF text. No cloud API costs or data privacy concerns.
+- **Intelligent PDF Handling**: Automatically downloads PDFs and extracts text for deep analysis. Supports custom storage paths.
+- **Multi-Format Export**: Save your research data to **CSV**, **JSON**, **Excel**, or **SQLite** for flexible offline analysis.
+- **Google Sheets Sync**: Seamlessly push compiled research data to a shared Google Sheet for team collaboration.
+- **Type-Safe & Modular**: Clean, documented Python code with full type hinting and a class-based architecture.
+
+---
 
 ## 🛠️ Prerequisites
 
-1. **Python 3.13+**: Ensure you have a modern Python version installed.
-2. **Ollama**: Install [Ollama](https://ollama.ai/) and download the Llama 3.2 model:
+1. **Python 3.13+**: Ensure you have a modern Python environment.
+2. **Ollama**: Install [Ollama](https://ollama.ai/) and download the required model:
    ```bash
    ollama pull llama3.2
    ```
 3. **Google Cloud Credentials**:
-   - Enable the Google Sheets and Google Drive APIs.
-   - Create a Service Account and download the JSON key as `credentials.json`.
+   - Enable the **Google Sheets** and **Google Drive** APIs.
+   - Create a **Service Account** and download the JSON key as `credentials.json`.
    - Share your target Google Sheet with the service account's email (Editor access).
+
+---
 
 ## 🚀 Installation
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/zjzhao1002/arxiv-flow.git
-   cd arxiv-flow
+   git clone https://github.com/zjzhao/arXivFlow.git
+   cd arXivFlow
    ```
 
 2. **Set up virtual environment**:
@@ -42,37 +50,66 @@ A Python-based automation tool that streamlines research paper tracking by fetch
 
 3. **Install dependencies**:
    ```bash
-   pip install -r requirements.txt
+   pip install .
    ```
-   *(Note: Ensure you have `arxiv`, `pandas`, `gspread`, `ollama`, and `google-auth` installed.)*
+
+---
 
 ## ⚙️ Configuration
 
-Update `user_input.json` with your specific details:
+Create a `user_input.json` file (optional, for batch processing) or configure the class directly in your script:
 
 ```json
 {
-    "sheet_id": "YOUR_GOOGLE_SHEET_ID_HERE", 
-    "csv_file": "arxiv_data.csv",
+    "sheet_id": "YOUR_GOOGLE_SHEET_ID", 
+    "csv_file": "results.csv",
     "credentials_file": "credentials.json"
 }
 ```
 
+---
+
 ## 📖 Usage
 
-Simply run the main script to trigger the automation:
+### Quick Start
 
-```bash
-python main.py
+```python
+from arxivflow import arXivFlow
+import datetime
+
+# 1. Initialize the flow
+flow = arXivFlow(
+    categories=["cs.AI", "cs.CV"], 
+    ollama_model="llama3.2",
+    max_results=20,
+    start_date=datetime.datetime.now() - datetime.timedelta(days=7)
+)
+
+# 2. Fetch data & Extract info (Keywords/Contacts)
+df = flow.get_arxiv_data(download_pdfs=True)
+
+# 3. Save to your preferred formats
+flow.save_to_csv("my_research.csv")
+flow.save_to_sqlite("research.db")
+
+# 4. Sync with Google Sheets
+flow.save_to_google_sheet(
+    sheet_id="YOUR_SHEET_ID", 
+    credentials_file="credentials.json"
+)
 ```
 
-The script will:
-1. Fetch papers from the last 7 days for the configured categories.
-2. **Download all related PDFs to a local directory.**
-3. Verify the Ollama model (and prompt to pull if missing).
-4. Generate keywords and extract contact info using Llama 3.2.
-5. Save data to `arxiv_data.csv`.
-6. Create/Update a worksheet in your Google Sheet named `Data_[StartDate]_to_[EndDate]`.
+---
+
+## 🏗️ Architecture
+
+The project follows a modular structure for easy extension:
+
+- `src/arxivflow/arxivflow.py`: The main orchestrator class (`arXivFlow`).
+- `src/arxivflow/ollama_functions.py`: Local LLM interface using the Ollama API.
+- `pdfs/`: Default directory for downloaded research papers.
+
+---
 
 ## 📜 License
 
@@ -80,4 +117,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request

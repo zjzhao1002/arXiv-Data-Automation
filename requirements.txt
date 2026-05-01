@@ -5,6 +5,7 @@ certifi==2026.4.22
 cffi==2.0.0
 charset-normalizer==3.4.7
 cryptography==46.0.7
+et_xmlfile==2.0.0
 feedparser==6.0.12
 google-api-core==2.30.3
 google-api-python-client==2.194.0
@@ -21,6 +22,7 @@ idna==3.13
 numpy==2.4.4
 oauthlib==3.3.1
 ollama==0.6.1
+openpyxl==3.1.5
 pandas==3.0.2
 proto-plus==1.27.2
 protobuf==7.34.1

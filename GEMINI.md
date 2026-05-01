@@ -1,56 +1,97 @@
-# arxiv-flow
+# arXivFlow
 
-This project is a Python-based automation tool designed to fetch research paper metadata from arXiv, extract keywords and contact information using an LLM, download PDFs, and synchronize the results with a Google Sheet.
+arXivFlow is a Python-based automation tool designed to fetch research paper metadata from arXiv, extract keywords and contact information using local LLMs (Ollama), and synchronize the results with Google Sheets.
 
 ## Project Overview
 
-- **Purpose**: Automates the process of tracking new research papers on arXiv. It fetches data for specific categories, uses Llama 3.2 (via Ollama) to summarize/extract keywords and extract contact information (emails and affiliations) from downloaded PDFs, and uploads the compiled data to a Google Sheet for easy tracking and sharing.
+- **Purpose**: Automates the tracking and processing of new research papers. It fetches data for specified arXiv categories, uses Ollama (Llama 3.2) to summarize and extract keywords/contact info from PDFs, and uploads the compiled data to a Google Sheet.
 - **Main Technologies**:
-  - **Python 3.13**: The core programming language.
-  - **arxiv**: Library for interacting with the arXiv API and downloading PDFs.
-  - **Ollama (Llama 3.2)**: Used for intelligent keyword extraction from titles and abstracts, and contact information extraction from PDFs.
-  - **PyMuPDF**: Used for extracting text from PDF files to enable contact information extraction.
-  - **pandas**: Used for data manipulation and intermediate CSV storage.
-  - **gspread**: For interacting with the Google Sheets API.
-  - **Google Sheets API**: The destination for the processed data.
+  - **Python 3.13**: Core language.
+  - **arxiv**: Library for querying the arXiv API.
+  - **Ollama (Llama 3.2)**: Local LLM for intelligent extraction.
+  - **PyMuPDF**: PDF text extraction for contact information retrieval.
+  - **pandas**: Data manipulation and export to CSV, Excel, JSON, and SQLite.
+  - **gspread**: Google Sheets API interaction.
 
 ## Architecture & Key Files
 
-### Core Scripts
-- `main.py`: The entry point of the application. It defines the categories (`hep-ph`, `hep-ex` by default) and the date range (last 7 days), then orchestrates the fetching and sheet update process.
-- `get_arxiv_data.py`: Contains logic to query the arXiv API, download PDF files to a date-stamped directory, and use `ollama` to generate 5 keywords and extract contact info for each paper. It includes a `category_checker` to validate categories and integrated model verification to ensure the Ollama model is available.
-- `update_google_sheet.py`: Handles authentication with Google APIs using a service account and updates a specific spreadsheet with the new data.
+The project follows a modular structure located in `src/arxivflow/`.
+
+### Core Modules
+- `src/arxivflow/arxivflow.py`: Contains the `arXivFlow` class, which orchestrates the entire workflow:
+  - Querying arXiv for specific categories and date ranges.
+  - Downloading PDFs to the `pdfs/` directory.
+  - Processing results and extracting information.
+  - Saving data to CSV, JSON, Excel, SQLite, or Google Sheets.
+- `src/arxivflow/ollama_functions.py`: Contains the `OllamaFunctions` class for interacting with the local Ollama API to extract keywords and contact details.
 
 ### Configuration & Data
-- `user_input.json`: Configures the target Google Sheet ID, the intermediate CSV filename, and the path to the Google credentials file.
-- `credentials.json`: (User-provided) Google Service Account credentials for API access.
-- `arxiv_data.csv`: Intermediate CSV file where fetched data is stored before being uploaded to Google Sheets.
-- `pdf_[START_DATE]_to_[END_DATE]/`: Local directory created automatically to store downloaded research papers.
+- `user_input.json`: Configures the target Google Sheet ID, CSV filename, and credentials path.
+- `credentials.json`: (User-provided) Google Service Account credentials.
+- `requirements.txt`: Project dependencies.
+- `pdfs/`: Local directory where downloaded research papers are stored.
 
 ## Building and Running
 
 ### Prerequisites
-1.  **Python 3.13+**: Ensure Python is installed and the virtual environment is activated (`source bin/activate`).
-2.  **Ollama**: Install [Ollama](https://ollama.ai/) and pull the required model:
-    ```bash
-    ollama pull llama3.2
-    ```
-3.  **Google Cloud Setup**:
-    - Enable the **Google Sheets API** and **Google Drive API** in the Google Cloud Console.
-    - Create a **Service Account** and download the JSON key as `credentials.json`.
-    - Share your target Google Sheet with the Service Account's email address (with Editor permissions).
+1. **Python 3.13+**: Ensure Python is installed.
+2. **Ollama**: Install [Ollama](https://ollama.ai/) and pull the required model:
+   ```bash
+   ollama pull llama3.2
+   ```
+3. **Google Cloud Setup**:
+   - Enable **Google Sheets** and **Google Drive** APIs.
+   - Create a **Service Account** and save the JSON key as `credentials.json`.
+   - Share the target Google Sheet with the Service Account email.
 
-### Execution
-Run the main script to fetch data, download PDFs, and update the sheet:
-```bash
-python main.py
+### Setup
+1. Create and activate a virtual environment:
+   ```bash
+   python -m venv .
+   source bin/activate  # On Windows: Scripts\activate
+   ```
+2. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+### Usage
+The `arXivFlow` class can be used as follows:
+```python
+from arxivflow import arXivFlow
+import datetime
+
+# Initialize with categories and optional Ollama model
+flow = arXivFlow(
+    categories=["cs.AI", "cs.LG"], 
+    ollama_model="llama3.2",
+    max_results=50,
+    start_date=datetime.datetime.now() - datetime.timedelta(days=3)
+)
+
+# Optional: Set a custom path for PDF downloads
+flow.set_pdfs_path("my_papers")
+
+# Fetch data and optionally download PDFs for contact extraction
+df = flow.get_arxiv_data(download_pdfs=True)
+
+# Save to multiple formats
+flow.save_to_csv("results.csv")
+flow.save_to_json("results.json")
+flow.save_to_excel("results.xlsx")
+flow.save_to_sqlite("results.db")
+
+# Sync with Google Sheets
+flow.save_to_google_sheet(
+    sheet_id="YOUR_SHEET_ID", 
+    credentials_file="credentials.json"
+)
 ```
 
 ## Development Conventions
 
-- **Modular Design**: Logic is separated into fetching, processing, and uploading modules.
-- **Automated Downloads**: PDF files are automatically retrieved and organized into folders named by date range.
-- **LLM Integration**: Keyword and contact information extraction are performed locally using Ollama, ensuring data privacy and no API costs.
-- **Data Persistence**: Data is first saved to a local CSV (`arxiv_data.csv`) before being pushed to Google Sheets, providing a local backup.
-- **Categorization and Validation**: The tool supports a wide range of arXiv categories. The `category_checker` in `get_arxiv_data.py` ensures that only valid categories are processed and provides human-readable names for logging.
-- **Model Verification and Auto-Pull**: The tool automatically checks for the required Ollama model before processing. If the model is missing, it prompts the user to pull it automatically.
+- **Modular Logic**: All core functionality resides in `src/arxivflow/`.
+- **Local AI**: Keyword and contact extraction are performed locally using Ollama to ensure privacy and eliminate API costs. The tool automatically handles model verification and pulling.
+- **Data Persistence**: Supports multiple export formats (CSV, JSON, Excel, SQLite) for flexibility.
+- **Type Hinting**: The codebase uses Python type hints for better maintainability and clarity.
+- **Configurable PDF Handling**: PDFs can be optionally downloaded and stored in custom directories.

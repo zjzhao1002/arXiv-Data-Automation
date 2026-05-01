@@ -4,36 +4,42 @@ __pycache__/
 *$py.class
 *.so
 .Python
-env/
 build/
 develop-eggs/
 dist/
 downloads/
 eggs/
 .eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+MANIFEST
 
 # Virtual Environment
 bin/
 include/
 lib/
+lib64/
 share/
 pyvenv.cfg
 pip-selfcheck.json
+env/
+venv/
+.env/
 
-# Project Specific
+# Project Specific Data & Config
 credentials.json
-arxiv_data.csv
-pdf_*/
 user_input.json
+*.csv
+*.json
+*.xlsx
+*.db
+pdfs/
+pdf_*/
+
+# IDEs
+.vscode/
+.idea/
 
 # Operating System
 .DS_Store
