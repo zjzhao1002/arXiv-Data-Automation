@@ -36,6 +36,13 @@
 
 ## 🚀 Installation
 
+### From PyPI (Recommended)
+```bash
+pip install arxivflow
+```
+
+### From Source (For Development)
+
 1. **Clone the repository**:
    ```bash
    git clone https://github.com/zjzhao/arXivFlow.git
@@ -52,20 +59,6 @@
    ```bash
    pip install .
    ```
-
----
-
-## ⚙️ Configuration
-
-Create a `user_input.json` file (optional, for batch processing) or configure the class directly in your script:
-
-```json
-{
-    "sheet_id": "YOUR_GOOGLE_SHEET_ID", 
-    "csv_file": "results.csv",
-    "credentials_file": "credentials.json"
-}
-```
 
 ---
 
@@ -107,7 +100,6 @@ The project follows a modular structure for easy extension:
 
 - `src/arxivflow/arxivflow.py`: The main orchestrator class (`arXivFlow`).
 - `src/arxivflow/ollama_functions.py`: Local LLM interface using the Ollama API.
-- `pdfs/`: Default directory for downloaded research papers.
 
 ---
 
