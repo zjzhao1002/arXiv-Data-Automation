@@ -30,7 +30,7 @@
 3. **Google Cloud Credentials**:
    - Enable the **Google Sheets** and **Google Drive** APIs.
    - Create a **Service Account** and download the JSON key as `credentials.json`.
-   - Share your target Google Sheet with the service account's email (Editor access).
+   - Ensure the service account has 'Editor' permissions on the sheet.
 
 ---
 

@@ -45,14 +45,22 @@ The project follows a modular structure located in `src/arxivflow/`.
    - Share the target Google Sheet with the Service Account email.
 
 ### Setup
+
+
+#### From PyPI (Recommended)
+```bash
+pip install arxivflow
+```
+
+#### From Source (For Development)
 1. Create and activate a virtual environment:
    ```bash
    python -m venv .
    source bin/activate  # On Windows: Scripts\activate
    ```
-2. Install dependencies:
+2. Install dependencies in editable mode:
    ```bash
-   pip install -r requirements.txt
+   pip install -e .
    ```
 
 ### Usage

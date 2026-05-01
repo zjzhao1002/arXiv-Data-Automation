@@ -3,6 +3,11 @@ import json
 
 class OllamaFunctions:
     def __init__(self, model_name: str) -> None:
+        """
+        The constructor of the OllamaFunctions class. This class can interact with the local Ollama API.
+        Args:
+            model_name: The model name of the local LLM. If this model is not found, the program will try to pull it.
+        """
         self.model_name = model_name
         if not self._ollama_model_checker():
             try:
@@ -12,6 +17,13 @@ class OllamaFunctions:
                 print(f"Error occurred while pulling the model: {e}")
 
     def _ollama_model_checker(self) -> bool:
+        """
+        This function checks if the given model is available locally. 
+        Args:
+            None
+        Returns:
+            Returns True if the model is available, False otherwise.
+        """
         available_models = ollama.list()
         model_names = [model['model'] for model in available_models.models]
         if f"{self.model_name}:latest" in model_names:
@@ -20,10 +32,25 @@ class OllamaFunctions:
             return False
 
     def _ollama_pull_model(self) -> None:
+        """
+        This function pulls the model using Ollama.
+        Args:
+            None
+        Returns:
+            None
+        """
         ollama.pull(self.model_name)
         print(f"Model '{self.model_name}' pulled successfully.")
 
     def extract_keywords_ollama(self, title: str, abstract: str) -> list:
+        """
+        This function extracts keywords from the title and abstract of an arXiv paper.
+        Args:
+            title: A string of the paper's title.
+            abstract: A string of the paper's abstract.
+        Returns:
+            keywords: A list containing up to 5 keywords.
+        """
 
         print(f"Extracting keywords using {self.model_name} for title: {title}")
         prompt = f"""
@@ -46,12 +73,19 @@ class OllamaFunctions:
         return keywords
     
     def extract_contact_ollama(self, text: str) -> dict:
+        """
+        This function extracts contact information from an arXiv paper.
+        Args:
+            text: A string extracted from the PDF file. It should contain the contact information.
+        Returns:
+            content_json: A dictionary that contains the emails and affiliations of authors.
+        """
 
         prompt = f"""
         Extract the emails and affiliations from the following text:\n\n
         {text}\n\n
-        Return the contact information in a JSON format: {{\"emails\": [], \"affiliations\": []}}. 
-        The affiliations should be started by words like "University of", "Institute of", "Department of", etc. 
+        Returns the contact information in JSON format: {{\"emails\": [], \"affiliations\": []}}. 
+        Affiliations should typically begin with words like "University of", "Institute of", "Department of", etc. 
         Combine department and university names into one full string.
         Don't add any keys to the JSON object. Don't guess if you don't see any contact information in the text.
         """
