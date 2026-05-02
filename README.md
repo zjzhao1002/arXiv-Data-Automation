@@ -6,14 +6,14 @@
 [![Ollama](https://img.shields.io/badge/Ollama-Llama3.2-orange.svg)](https://ollama.ai/)
 [![arXiv](https://img.shields.io/badge/arXiv-API-red.svg)](https://arxiv.org/help/api/index)
 
-**arXivFlow** is a powerful Python-based automation tool designed to streamline the research paper discovery and tracking process. It autonomously fetches metadata from arXiv, performs local AI-driven analysis using **Ollama (Llama 3.2)**, and synchronizes the results with **Google Sheets** and local databases.
+**arXivFlow** is a powerful Python-based automation tool designed to streamline the research paper discovery and tracking process. It autonomously fetches metadata from arXiv, performs local AI-driven analysis using **Ollama (e.g., Llama 3.2)**, and synchronizes the results with **Google Sheets** and local databases.
 
 ---
 
 ## ✨ Features
 
 - **Automated Retrieval**: Fetch the latest papers from specific arXiv categories (e.g., `cs.AI`, `cs.LG`, `hep-ph`) within any date range.
-- **Local AI Analysis**: Uses **Ollama (Llama 3.2)** to extract keywords and contact information (emails/affiliations) directly from PDF text. No cloud API costs or data privacy concerns.
+- **Local AI Analysis**: Uses **Ollama models (e.g., Llama 3.2)** to extract keywords and contact information (emails/affiliations) directly from PDF text. No cloud API costs or data privacy concerns.
 - **Intelligent PDF Handling**: Automatically downloads PDFs and extracts text for deep analysis. Supports custom storage paths.
 - **Multi-Format Export**: Save your research data to **CSV**, **JSON**, **Excel**, or **SQLite** for flexible offline analysis.
 - **Google Sheets Sync**: Seamlessly push compiled research data to a shared Google Sheet for team collaboration.
@@ -24,7 +24,7 @@
 ## 🛠️ Prerequisites
 
 1. **Python 3.13+**: Ensure you have a modern Python environment.
-2. **Ollama**: Install [Ollama](https://ollama.ai/) and download the required model:
+2. **Ollama**: Install [Ollama](https://ollama.ai/) and download the required model (e.g., Llama 3.2):
    ```bash
    ollama pull llama3.2
    ```
