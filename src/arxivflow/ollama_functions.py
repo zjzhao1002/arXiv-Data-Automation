@@ -19,6 +19,8 @@ class OllamaFunctions:
     def _ollama_model_checker(self) -> bool:
         """
         This function checks if the given model is available locally. 
+        It checks for exact matches or matches with tags (like :latest or :3b).
+        If a match is found via a tag, it updates self.model_name to the full name.
         Args:
             None
         Returns:
@@ -26,10 +28,26 @@ class OllamaFunctions:
         """
         available_models = ollama.list()
         model_names = [model['model'] for model in available_models.models]
-        if f"{self.model_name}:latest" in model_names:
+        
+        # 1. Exact match (e.g., "llama3.2:latest" or "llama3.2:3b")
+        if self.model_name in model_names:
             return True
-        else:
-            return False
+            
+        # 2. If no tag provided, check for common tags
+        if ":" not in self.model_name:
+            # Check for :latest first
+            latest_name = f"{self.model_name}:latest"
+            if latest_name in model_names:
+                self.model_name = latest_name
+                return True
+            
+            # Check for any other tag (e.g., "llama3.2" matches "llama3.2:3b")
+            for name in model_names:
+                if name.startswith(f"{self.model_name}:"):
+                    self.model_name = name
+                    return True
+                    
+        return False
 
     def _ollama_pull_model(self) -> None:
         """
